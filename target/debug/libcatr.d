@@ -1,1 +1,1 @@
-/Users/trentonornelas/repos/command-line-rust/chapter-3-recreate-cat/target/debug/libcatr.rlib: /Users/trentonornelas/repos/command-line-rust/chapter-3-recreate-cat/src/lib.rs
+/home/trent/repos/command-line-rust/chapter-3-rcat/target/debug/libcatr.rlib: /home/trent/repos/command-line-rust/chapter-3-rcat/src/lib.rs

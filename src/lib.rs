@@ -23,14 +23,47 @@ pub fn run(config: Config) -> MyResult<()> {
     for filename in config.files {
         match open(&filename) {
             Err(err) => eprintln!("Failed to open {}: {}", filename, err),
-            Ok(_) => println!("Opened {}", filename),
+            Ok(contents) => {
+                match config.number_lines {
+                    true => {
+                        let mut line_count = 1;
+                        for line in contents.lines() {
+                            println!("{} {}", line_count, line.unwrap());
+                            line_count += 1;
+                        }
+                    }
+                    false => {
+                        for line in contents.lines() {
+                            println!("{}", line.unwrap());
+                        }
+                    }
+                }
+                match config.number_nonblank_lines {
+                    true => {
+                        let mut line_count = 1;
+                        for line in contents.lines() {
+                            match line.expect("Failed to read line").as_ref() {
+                                "\n" => {
+                                    println!("{}", line_count);
+                                    line_count += 1;
+                                }
+                                _ => {
+                                    println!("{} {:#?}", line_count, line);
+                                    line_count += 1;
+                                }
+                            }
+                        }
+                    }
+                    false => {
+                        for line in contents.lines() {
+                            println!("{}", line.unwrap());
+                        }
+                    }
+                }
+            }
         }
     }
     Ok(())
-}
-
-fn print() {
-
 }
 
 pub fn get_args() -> MyResult<Config> {

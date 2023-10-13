@@ -1,4 +1,7 @@
 test:
-	@cargo fmt
-	@cargo check
-	@cargo clippy
+	@cargo fmt -q
+	@cargo check -q
+
+clip:
+	@cargo clippy -q
+
