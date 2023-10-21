@@ -24,41 +24,20 @@ pub fn run(config: Config) -> MyResult<()> {
         match open(&filename) {
             Err(err) => eprintln!("Failed to open {}: {}", filename, err),
             Ok(contents) => {
-                match config.number_lines {
-                    true => {
-                        let mut line_count = 1;
-                        for line in contents.lines() {
-                            println!("{} {}", line_count, line.unwrap());
-                            line_count += 1;
-                        }
+                let mut line_count = 1;
+
+                for read_line in contents.lines() {
+                    let line = read_line.expect("Failed to read line");
+
+                    if config.number_lines {
+                        println!("{}", line_count);
                     }
-                    false => {
-                        for line in contents.lines() {
-                            println!("{}", line.unwrap());
-                        }
+
+                    if !config.number_nonblank_lines || !line.is_empty() {
+                        println!("{}", line);
                     }
-                }
-                match config.number_nonblank_lines {
-                    true => {
-                        let mut line_count = 1;
-                        for line in contents.lines() {
-                            match line.expect("Failed to read line").as_ref() {
-                                "\n" => {
-                                    println!("{}", line_count);
-                                    line_count += 1;
-                                }
-                                _ => {
-                                    println!("{} {:#?}", line_count, line);
-                                    line_count += 1;
-                                }
-                            }
-                        }
-                    }
-                    false => {
-                        for line in contents.lines() {
-                            println!("{}", line.unwrap());
-                        }
-                    }
+
+                    line_count += 1;
                 }
             }
         }
